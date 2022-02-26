@@ -8,13 +8,13 @@
 *,*::before,*::after{
     box-sizing: border-box;
 }
-
+/* background-image: url(../Images/IMG_20180513_071750.jpg); */
 body{
     margin: 0px;
     padding: 1px;
     display: flex;
     flex-direction: column;
-    background-image: url(../Images/IMG_20180513_071750.jpg);
+    background-image: url(../../Images/IMG_20180513_071750.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
