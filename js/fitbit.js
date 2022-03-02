@@ -1,33 +1,53 @@
-var currentMileMarker;
-
+// Calculate Time
+// const minute = 1000 * 60;
+// const hour = minute * 60;
+// const day = hour * 24;
+// const year = day * 365;
+// const sessionExpireTime = year;
+// sessionItem = localStorage.getItem("fitbitData");
+// const activityType_Array = ['steps','elevation','floors','calories'];
+const activityType_Array = ['steps'];
 // Initialize
-function instaInit(){
-	let igData = sessionHelper.getItem("instagramData")
-	if(!igData){
-		getInstagramData();
-	}else{
-		popuplateInstragramData(igData);
-	}
+function fitbitInit(){
+    // Poplate data from each activity
+    activityType_Array.forEach(function(value){
+        let localstorageData = localStorage.getItem("fitbitData_"+value);
+        if(!localstorageData){
+            getFitbitData(value);
+        }else{
+            let temp = JSON.parse(localstorageData);
+            let oldDate = Math.round(new Date(temp.key).getTime());
+            let newDate = Math.round(new Date().getTime());  
+            if ((newDate-oldDate) > sessionExpireTime) {
+                getFitbitData(value);
+            }else{
+                popuplateFitbitData(temp.value);
+            }
+        }
+    })
 }
 
 // If there is an error, populate with data from localstorage if available
-function getInstagramData(){
+function getFitbitData(activityType){
 	$.ajax({
-		type: "GET",
-		url: "php/instagramData.php",
+		type: "POST",
+        data: {
+            action: activityType
+        },
+		url: "php/fitbitData.php",
 		success: function(response){
 			// Populate 
-			let jsonResponse = JSON.parse(response).data;
+			let jsonResponse = JSON.parse(response);
 			if(jsonResponse){
-				let parsedResponse = jsonResponse.slice(0,4)
-				sessionHelper.setItem(new Date(), parsedResponse)
-				popuplateInstragramData(parsedResponse);
+				let fitbitDataObject = {key:new Date(),value:jsonResponse};
+				localStorage.setItem("fitbitData_"+activityType,JSON.stringify(fitbitDataObject));
+				popuplateFitbitData(fitbitDataObject.value);
 			}else{
-				popuplateInstragramDataFromLocalStorage();
+				popuplateFitbitDataFromLocalStorage();
 			}
 		},
 		error: function(response){
-			popuplateInstragramDataFromLocalStorage();
+			popuplateFitbitDataFromLocalStorage();
 		}
 	});
 
@@ -38,27 +58,19 @@ function getInstagramData(){
 
 }
 
-// Populate Instagram with old data if available
-function popuplateInstragramDataFromLocalStorage(){
-	let temp = JSON.parse(sessionItem);
+// // Populate Instagram with old data if available
+function popuplateFitbitDataFromLocalStorage(activityType){
+	let temp = JSON.parse(localStorage.getItem("fitbitData_"+activityType));
 	if(temp){
-		popuplateInstragramData(temp.value);
+		popuplateFitbitData(temp.value);
 	}else{
-		console.log("Unable to retrieve Data and data stored locally.");
+		console.log("Unable to retrieve Data.");
 	}
 }
 
-function popuplateInstragramData(data){
-	for( x in data.reverse()){
-		if(x>5){return}
-		if(x == 0){
-			$('.carousel-inner').append('<div class="carousel-item active"><img class="section-instagram-post__img" src="'+data[x].media_url+'"><div class="section-instagram-caption carousel-caption d-none d-md-block">'+data[x].caption+'</div></div>');
-			let splitCaption = data[x].caption.toString().split(" ")[0].split("|");
-			if(splitCaption.length > 1){
-				currentMileMarker = splitCaption[1].split(":")[1];
-			}
-		}else{
-			$('.carousel-inner').append('<div class="carousel-item"><img class="section-instagram-post__img" src="'+data[x].media_url+'"><div class="section-instagram-caption carousel-caption d-none d-md-block">'+data[x].caption+'</div></div>');
-		}
+function popuplateFitbitData(activityType, data){
+    console.log("TODO: Implement popuplateFitbitData()")
+	for( x in data){
+		// Add data/stats to page
 	}
 }

@@ -7,11 +7,9 @@
         function env($key, $default = null)
         {
             $value = getenv($key);
-
             if ($value === false) {
                 return $default;
             }
-
             return $value;
         }
     }
@@ -24,6 +22,5 @@
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response_json = curl_exec($ch);
     curl_close($ch);
-    // $response=json_decode($response_json, true);
     echo $response_json
 ?>
