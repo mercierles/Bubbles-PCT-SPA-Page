@@ -125,7 +125,7 @@ p{
     /* Account for Fixed header and section title offsets */
     scroll-margin-top: 80px;
     /* Safari header/section title offset */
-    scroll-snap-margin-top:80px; 
+    /* scroll-snap-margin-top:80px;  */
 }
 
 .section__show{
