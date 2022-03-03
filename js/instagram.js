@@ -1,17 +1,19 @@
 var currentMileMarker;
 
 // Initialize
-function instaInit(){
+function instaInit(callback){
 	let igData = sessionHelper.getItem("instagramData")
 	if(!igData){
-		getInstagramData();
+		getInstagramData(callback);
 	}else{
-		popuplateInstragramData(igData);
+		popuplateInstragramData(igData,callback);
 	}
+
+
 }
 
 // If there is an error, populate with data from localstorage if available
-function getInstagramData(){
+function getInstagramData(callback){
 	$.ajax({
 		type: "GET",
 		url: "php/instagramData.php",
@@ -21,7 +23,7 @@ function getInstagramData(){
 			if(jsonResponse){
 				let parsedResponse = jsonResponse.slice(0,4)
 				sessionHelper.setItem(new Date(), parsedResponse)
-				popuplateInstragramData(parsedResponse);
+				popuplateInstragramData(parsedResponse,callback);
 			}else{
 				popuplateInstragramDataFromLocalStorage();
 			}
@@ -48,7 +50,7 @@ function popuplateInstragramDataFromLocalStorage(){
 	}
 }
 
-function popuplateInstragramData(data){
+function popuplateInstragramData(data,callback){
 	for( x in data.reverse()){
 		if(x>5){return}
 		if(x == 0){
@@ -61,4 +63,5 @@ function popuplateInstragramData(data){
 			$('.carousel-inner').append('<div class="carousel-item"><img class="section-instagram-post__img" src="'+data[x].media_url+'"><div class="section-instagram-caption carousel-caption d-none d-md-block">'+data[x].caption+'</div></div>');
 		}
 	}
+	callback();
 }

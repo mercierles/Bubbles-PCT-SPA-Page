@@ -1,5 +1,4 @@
 <?php
-
     if(file_exists('./env.php')) {
         include './env.php';
     }
@@ -17,13 +16,10 @@
     $fitbitToken = env('fitbitToken');
     
     
-    
-    if(isset($_POST['action'])){
-        $actionURL = "https://api.fitbit.com/1/user/-/activities/{$_POST['action']}/date/2022-01-01/today.json";
-        if ($_POST['action'] == "steps") { connectToFitbit($actionURL,$fitbitToken); }
-        // if ($_POST['action'] == "elevation") { connectToFitbit($actionURL,$fitbitToken); }
-        // if ($_POST['action'] == "floors") { connectToFitbit($actionURL,$fitbitToken); }
-        // if ($_POST['action'] == "calories") { connectToFitbit($actionURL,$fitbitToken); }
+    if(isset($_GET['action'])){
+        $action = trim($_GET['action'],"'");
+        $actionURL = "https://api.fitbit.com/1/user/-/activities/{$action}/date/2022-01-01/today.json";
+        getWeeklyAverageStatForAction($action,$actionURL,$fitbitToken);
     }
 
     function connectToFitbit($url, $token) {
@@ -32,12 +28,33 @@
         // Create Options/Headers
         curl_setopt($ch, CURLOPT_HTTPGET, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Add token to HTTP Header
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer {$token}"]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         // Execute cURL
         $response_json = curl_exec($ch);
+        // Echo Errors
+        if(curl_errno($ch)){
+            echo "err".curl_error($ch);
+        }
         // Close cURL connection
         curl_close($ch);
         // return response
-        echo $response_json;
+        return $response_json;
     }
+
+    function getWeeklyAverageStatForAction($action, $actionURL,$fitbitToken){
+        $totalGained = 0;
+        // Get Dataset for action from fitbit
+        $actionData = connectToFitbit($actionURL,$fitbitToken);
+        // Decode dataset into an Array
+        $decodedActionData = json_decode($actionData, TRUE);
+        // Loop through dataset calculating the weeks average
+        foreach($decodedActionData['activities-'.$action] as $key) 
+        {
+         $totalGained = $totalGained + $key['value'];
+        }
+        // Return the Actions Calculated Avg 
+        echo bcdiv($totalGained,count($decodedActionData['activities-'.$action]));
+     }
 ?>

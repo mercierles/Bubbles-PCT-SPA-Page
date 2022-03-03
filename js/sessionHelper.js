@@ -3,7 +3,7 @@ const minute = 1000 * 60;
 const hour = minute * 60;
 const day = hour * 24;
 const year = day * 365;
-const sessionExpireTime = year;
+const sessionExpireTime = 1;
 
 // Create Namespace for these Global variable
 var sessionHelper = {};

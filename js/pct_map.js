@@ -6,6 +6,7 @@ function mapInit(){
     PCTMileageRatio = Number((2650/svgTrailLength)).toFixed(2);
     svgTrail.style.strokeDasharray = svgTrailLength;
     svgTrail.style.strokeDashoffset = svgTrailLength;
+    drawTrail();
 }
 
 // Fill in the Trail Line on the Map
