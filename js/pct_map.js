@@ -20,12 +20,12 @@ function drawTrail() {
 
 // Parse out the Current Milemarker from the active Carousel Image
 function getCurrentMileMarker(){
-	let caption = "PCT|Location|Mile:"+ Math.floor(Math.random() * (2650 - 1 + 1) + 1) +" - " + jQuery(".carousel-item.active .carousel-caption")[0].innerText;
-	let splitCaption = caption.split("-")[0].split("|");
-	if(splitCaption.length > 1){
-		currentMileMarker = parseInt(splitCaption[2].split(":")[1].trim());
-		console.log(currentMileMarker);
-	}   
+    // Grab milemarker info from Instagram Caption
+	let caption = jQuery(".section-instagram-caption")[0].innerText;
+	let splitCaption = caption.split(" ")[0].split("|");
+	if(splitCaption.length > 1 && splitCaption[2].split(":") > 1){
+		currentMileMarker = splitCaption[2].split(":")[1];
+	}  
 }
 
 // Estimate Trail position (because the mileage is off from the real)

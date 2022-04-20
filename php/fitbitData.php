@@ -15,10 +15,14 @@
     }
     $fitbitToken = env('fitbitToken');
     
-    
     if(isset($_GET['action'])){
+        if(isset($_GET['date'])){
+            $date = $_GET['date'];
+        }else{
+            $date = "2022-01-01";
+        }
         $action = trim($_GET['action'],"'");
-        $actionURL = "https://api.fitbit.com/1/user/-/activities/{$action}/date/2022-01-01/today.json";
+        $actionURL = "https://api.fitbit.com/1/user/-/activities/{$action}/date/{$date}/today.json";
         getWeeklyAverageStatForAction($action,$actionURL,$fitbitToken);
     }
 
