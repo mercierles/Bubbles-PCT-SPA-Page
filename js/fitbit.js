@@ -33,6 +33,10 @@ function getFitbitData(activityType){
 		},
 		success: function(response){
 			// Populate 
+			if(response.toString().includes("%%ERROR%%")){
+				jQuery("#fitbitData").append('<div class="col-6 mb-5"><h5>Unable to Retrieve '+activityType+'</h5></div>');
+				return;
+			}
 			let jsonResponse = JSON.parse(response);
 			if(jsonResponse){
 				sessionHelper.setItem("fitbitData_"+activityType,jsonResponse);

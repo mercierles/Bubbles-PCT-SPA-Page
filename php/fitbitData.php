@@ -27,6 +27,10 @@
     }
 
     function connectToFitbit($url, $token) {
+        if(empty($token))  {
+            echo "%%ERROR%%";
+            return;
+        }
         // Initalize cURL connection
         $ch = curl_init($url);
         // Create Options/Headers

@@ -14,7 +14,7 @@ body{
     padding: 0px;
     display: flex;
     flex-direction: column;
-    background-image: url(../../Images/backgroundlowres_1920x1440.jpg);
+    background-image: url(../Images/backgroundlowres_1920x1440.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;

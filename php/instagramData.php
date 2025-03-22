@@ -37,6 +37,10 @@
     function getLatestMediaPost()
     {
         $token = env('token');
+        if(empty($token))  {
+            echo "%%ERROR%%";
+            return;
+        }
         $url = $GLOBALS['instagramGraphURLChildren']."/me/media?fields=id,caption,media_type,media_url,children&access_token=".$GLOBALS['token'];
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);

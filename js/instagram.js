@@ -23,6 +23,11 @@ function getInstagramData(callback){
 		},
 		success: function(response){
 			// Populate 
+			if(response.toString().includes("%%ERROR%%")){
+				$('#instagram-carousel').prepend('<div>Missing Instagram Data</div>');
+				$('#instagram-carousel').hide();
+				return;
+			}
 			let jsonResponse = JSON.parse(response);
 			if(jsonResponse){
 				sessionHelper.setItem("instagramData",jsonResponse)
