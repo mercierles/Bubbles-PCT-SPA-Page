@@ -18,3 +18,5 @@ VSCode
   Download Extension PHP Server
     Follow Instruction and Serve Index.html
 
+NOTE: Missing .env file means instagram and fitbit data will not load. These API require a token which has not been provided.
+
